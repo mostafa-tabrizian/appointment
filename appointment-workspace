@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "appointment",
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"Liara",
+			"toman"
+		],
+		"cSpell.enabled": true
+	}
+}
