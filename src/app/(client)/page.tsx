@@ -4,7 +4,7 @@
 // import OurWorkHistory from './components/ourWorkHistory'
 // import RoadMap from './components/roadMap'
 import dbConnect from '@/lib/dbConnect'
-import Calender from './components/calender'
+import Reserve from './components/reserve'
 import Appointment from '@/models/appointment'
 import WorkingDays from '@/models/workingDays'
 // import Hero from './components/hero'
@@ -32,7 +32,7 @@ async function Home() {
       <div className='mb-16 mt-24 space-y-16'>
          {/* <Hero /> */}
 
-         <Calender
+         <Reserve
             workingDays={JSON.parse(JSON.stringify(workingDays))}
             appointments={JSON.parse(JSON.stringify(appointments))}
          />
