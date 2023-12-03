@@ -6,30 +6,31 @@ import { getServerSession } from 'next-auth'
 import Appointment, { IAppointment } from '@/models/appointment'
 import dbConnect from '@/lib/dbConnect'
 
-// export async function GET() {
-//    const session: { _doc: { role: string } } | null = await getServerSession(authOptions)
-//    if (!session || session?._doc.role !== 'ادمین') return NextResponse.json({ status: 403 })
-
-//    await dbConnect()
-//    const appointments = await Appointment.find({}).populate('user', 'name mobileNumber').exec()
-
-//    return NextResponse.json(appointments)
-// }
+export async function GET() {
+   return NextResponse.json(await Appointment.find())
+}
 
 export async function POST(request: Request) {
    try {
-      const { name, mobileNumber, description, paid, reservedDate }: IAppointment = await request.json()
+      const { name, mobileNumber, description, reservedDate }: IAppointment = await request.json()
 
 
       const session: { _doc: { _id: string } } | null = await getServerSession(authOptions)
       if (!session) return NextResponse.json({ status: 403 })
 
       dbConnect()
+
+      const appointmentExist = await Appointment.findOne({ name, reservedDate })
+      if (appointmentExist) return NextResponse.json({
+         _id: appointmentExist._id,
+         message: 'appointment existed'
+      })
+
       const appointment = await Appointment.create({
          name,
          mobileNumber,
          description,
-         paid,
+         paid: false,
          reservedDate,
       })
 

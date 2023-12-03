@@ -11,16 +11,49 @@ import { AppointmentValidation } from '@/formik/schema/validation'
 import FormikInput from '@/formik/input'
 import FormikTextarea from '@/formik/textarea'
 
-const Reserve = ({
-   workingDays,
-   appointments,
-}: {
-   workingDays: IWorkingDay[]
-   appointments: IAppointment[]
-}) => {
+import useSWR from 'swr'
+
+const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
    const [calendarValue, setCalendarValue] = useState(new Date())
    const [timeValue, setTimeValue] = useState(0)
    const [detailForm, setDetailForm] = useState(false)
+
+   // @ts-ignore
+   const fetcher = (...args) => fetch(...args).then((res) => res.json())
+
+   const {
+      data: appointments,
+      isLoading: isLoadingAppointments,
+   }: {
+      data: IAppointment[]
+      isLoading: boolean
+   } = useSWR('/api/appointment', fetcher)
+
+   const handlePayment = async (name: string, mobileNumber: string, appointmentId: string) => {
+      toast.info('در حال انتقال به درگاه پرداخت...')
+
+      try {
+         const res = await fetch('/api/payment', {
+            method: 'POST',
+            body: JSON.stringify({
+               name,
+               mobileNumber,
+               appointmentId,
+            }),
+         })
+
+         const resData = await res.json()
+         const zarinpalAuthority = resData.authority
+
+         if (zarinpalAuthority) {
+            window.location.href = `https://www.zarinpal.com/pg/StartPay/${zarinpalAuthority}`
+         }
+      } catch (err) {
+         toast.error('در ایجاد درگاه پرداخت خطایی رخ داد. لطفا مجدد تلاش کنید.')
+         console.error('Zarinpal Error: ', err)
+         return null
+      }
+   }
 
    const handleSubmit = async (
       {
@@ -51,7 +84,6 @@ const Reserve = ({
                name,
                mobileNumber,
                description,
-               paid: true,
                reservedDate,
             }),
          })
@@ -64,7 +96,8 @@ const Reserve = ({
             return toast.error('خطا در برقراری ارتباط')
          }
 
-         toast.success('رزرو شما با موفقیت ثبت گردید.')
+         await handlePayment(name, mobileNumber, resData._id)
+
          setDetailForm(false)
          resetForm()
       } catch (err) {
@@ -122,55 +155,95 @@ const Reserve = ({
                </CalendarProvider>
             </div>
             <div>
-               <div className='grid grid-cols-3 gap-5'>
-                  {workingDays.map((day) => {
-                     if (day.dayIndex !== calendarValue.getDay()) return
+               {isLoadingAppointments ? (
+                  <div className='col-span-4 grid h-full items-center justify-center'>
+                     <svg
+                        className='mx-auto my-1 h-12 w-12 animate-spin text-blue-500'
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                     >
+                        <circle
+                           className='opacity-25'
+                           cx='12'
+                           cy='12'
+                           r='10'
+                           stroke='currentColor'
+                           strokeWidth='4'
+                        ></circle>
+                        <path
+                           className='opacity-75'
+                           fill='currentColor'
+                           d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                        ></path>
+                     </svg>
+                  </div>
+               ) : (
+                  <div className='grid grid-cols-3 gap-5'>
+                     {workingDays.map((day) => {
+                        if (day.dayIndex !== calendarValue.getDay()) return
 
-                     const eachSessionLength = 60
+                        const eachSessionLength = 60
 
-                     const sessions = (day.closeTime - day.openTime) / eachSessionLength
+                        const sessions = (day.closeTime - day.openTime) / eachSessionLength
 
-                     return Array.from({ length: sessions }, (_, index) => {
-                        const sessionTime = day.openTime + index * eachSessionLength
+                        return Array.from({ length: sessions }, (_, index) => {
+                           const sessionTime = day.openTime + index * eachSessionLength
 
-                        const reservedBefore = appointments.some((appointment) => {
-                           const year = calendarValue.getFullYear()
-                           const month = calendarValue.getMonth()
-                           const day = calendarValue.getDate()
-                           const hour = Math.floor(sessionTime / 60)
-                           const min = sessionTime % 60
+                           let reservePaid
+                           let reservePaymentExpired = false
+                           const reservedBefore = appointments?.some((appointment) => {
+                              const year = calendarValue.getFullYear()
+                              const month = calendarValue.getMonth()
+                              const day = calendarValue.getDate()
+                              const hour = Math.floor(sessionTime / 60)
+                              const min = sessionTime % 60
 
-                           const reserverdTime = new Date(year, month, day, hour, min)
+                              const reserverdTime = new Date(year, month, day, hour, min)
 
-                           if (
-                              new Date(appointment.reservedDate).getTime() ==
-                              reserverdTime.getTime()
-                           ) {
-                              return true
-                           }
+                              if (
+                                 new Date(appointment.reservedDate).getTime() ==
+                                 reserverdTime.getTime()
+                              ) {
+                                 reservePaid = appointment.paid
+                                 if (!reservePaid) {
+                                    const tenMin = 10 * 60 * 1000
+                                    reservePaymentExpired =
+                                       new Date(appointment.createdAt).getTime() + tenMin <=
+                                       new Date().getTime()
+                                 }
+                                 return true
+                              }
+                           })
+
+                           return (
+                              <button
+                                 disabled={
+                                    reservedBefore && (reservePaid || !reservePaymentExpired)
+                                 }
+                                 key={index}
+                                 className={`gap-3 rounded-md ${
+                                    reservedBefore && reservePaid ? 'border-2 border-red-600' : ''
+                                 } ${
+                                    reservedBefore && !reservePaid && !reservePaymentExpired
+                                       ? 'border-2 border-yellow-600'
+                                       : ''
+                                 } ${
+                                    timeValue == sessionTime
+                                       ? 'bg-blue-900 text-white shadow-md'
+                                       : 'bg-blue-100 text-slate-800'
+                                 } py-3 text-center`}
+                                 onClick={() => setTimeValue(sessionTime)}
+                              >
+                                 <span className='text-base text-inherit'>
+                                    {formatTimeWithLeadingZeros(sessionTime / eachSessionLength)}
+                                 </span>
+                              </button>
+                           )
                         })
-
-                        return (
-                           <button
-                              disabled={reservedBefore}
-                              key={index}
-                              className={`gap-3 rounded-md ${
-                                 reservedBefore ? 'border-2 border-red-600' : ''
-                              } ${
-                                 timeValue == sessionTime
-                                    ? 'bg-blue-900 text-white shadow-md'
-                                    : 'bg-blue-100 text-slate-800'
-                              } py-3 text-center`}
-                              onClick={() => setTimeValue(sessionTime)}
-                           >
-                              <span className='text-base text-inherit'>
-                                 {formatTimeWithLeadingZeros(sessionTime / eachSessionLength)}
-                              </span>
-                           </button>
-                        )
-                     })
-                  })}
-               </div>
+                     })}
+                  </div>
+               )}
             </div>
          </div>
          <div className='mt-10 flex justify-center'>
@@ -267,7 +340,7 @@ const Reserve = ({
                                     type='submit'
                                     className='col-span-3 w-full rounded bg-green-500 py-1 text-white'
                                  >
-                                    پرداخت
+                                    پرداخت و ثبت نهایی
                                  </button>
                                  <button
                                     type='button'

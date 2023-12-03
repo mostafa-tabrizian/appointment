@@ -16,11 +16,3 @@ export const AppointmentValidation = yup.object().shape({
       .min(10, 'توضیحات حداقل باید ۱۰ کارکتر باشد')
       .matches(rule.persian, { message: 'لطفا توضیحات را به فارسی وارد کنید' }),
 })
-
-export const VerificationSchemaValidation = yup.object().shape({
-   code: yup
-      .string()
-      .min(5, '!کد شما صحیح نمی‌باشد')
-      .max(5, '!کد شما صحیح نمی‌باشد')
-      .required('لطفا کد تأیید خود را وارد کنید'),
-})

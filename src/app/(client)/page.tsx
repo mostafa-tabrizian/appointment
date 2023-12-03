@@ -5,7 +5,6 @@
 // import RoadMap from './components/roadMap'
 import dbConnect from '@/lib/dbConnect'
 import Reserve from './components/reserve'
-import Appointment from '@/models/appointment'
 import WorkingDays from '@/models/workingDays'
 // import Hero from './components/hero'
 
@@ -17,25 +16,13 @@ export const metadata = {
 async function Home() {
    await dbConnect()
 
-   const appointments = await Appointment.find()
    const workingDays = await WorkingDays.find()
-
-   // await Appointment.create({
-   //    name: 'مصطفی تبریزیان',
-   //    mobileNumber: '09128521769',
-   //    description: 'توضیحات رزرو من',
-   //    paid: true,
-   //    reservedDate: new Date(2023, 11, 2, 10, 0),
-   // })
 
    return (
       <div className='mb-16 mt-24 space-y-16'>
          {/* <Hero /> */}
 
-         <Reserve
-            workingDays={JSON.parse(JSON.stringify(workingDays))}
-            appointments={JSON.parse(JSON.stringify(appointments))}
-         />
+         <Reserve workingDays={JSON.parse(JSON.stringify(workingDays))} />
 
          {/* <OurFeatures />
 
