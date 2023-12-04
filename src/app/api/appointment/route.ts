@@ -30,10 +30,15 @@ export async function POST(request: Request) {
       dbConnect()
 
       const appointmentExist = await Appointment.findOne({ name, reservedAt })
-      if (appointmentExist) return NextResponse.json({
-         _id: appointmentExist._id,
-         message: 'appointment existed'
-      })
+      if (appointmentExist) {
+         appointmentExist.updatedAt = new Date()
+         await appointmentExist.save()
+
+         return NextResponse.json({
+            _id: appointmentExist._id,
+            message: 'appointment existed'
+         })
+      }
 
       const appointment = await Appointment.create({
          name,

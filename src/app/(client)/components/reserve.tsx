@@ -129,9 +129,10 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
       else return setCalendarValue(new Date(day))
    }
 
-   function formatTimeWithLeadingZeros(time: number) {
-      const paddedTime = (time * 100).toString().padStart(4, '0')
-      return `${paddedTime.slice(0, 2)}:${paddedTime.slice(2)}`
+   function formatTimeWithLeadingZeros(hour: number, min: number) {
+      const hourFormat = hour.toString().padStart(2, '0')
+      const minuteFormat = min.toString().padStart(2, '0')
+      return `${hourFormat}:${minuteFormat}`
    }
 
    const handleDateTimeSubmit = () => {
@@ -185,8 +186,9 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
 
                         const eachSessionLengthInMin = 60
 
-                        const sessionsNumber =
-                           (day.closeTime - day.openTime) / eachSessionLengthInMin + 1
+                        const sessionsNumber = Math.round(
+                           (day.closeTime - day.openTime) / eachSessionLengthInMin + 1,
+                        )
 
                         return Array.from({ length: sessionsNumber }, (_, index) => {
                            const sessionTimeInMin = day.openTime + index * eachSessionLengthInMin
@@ -228,7 +230,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                               if (!reservePaid) {
                                  const tenMin = 10 * 60 * 1000
                                  reservePaymentExpired =
-                                    new Date(appointment.createdAt).getTime() + tenMin <=
+                                    new Date(appointment.updatedAt).getTime() + tenMin <=
                                     new Date().getTime()
                               }
                            }
@@ -262,7 +264,8 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                               >
                                  <span className='text-base text-inherit'>
                                     {formatTimeWithLeadingZeros(
-                                       sessionTimeInMin / eachSessionLengthInMin,
+                                       Math.floor(sessionTimeInMin / 60),
+                                       sessionTimeInMin % 60,
                                     )}
                                  </span>
                               </button>
