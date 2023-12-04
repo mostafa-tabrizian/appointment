@@ -27,7 +27,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
    }: {
       data: IAppointment[]
       isLoading: boolean
-   } = useSWR('/api/appointment', fetcher)
+   } = useSWR(`/api/appointment?date=${calendarValue.getTime()}`, fetcher)
 
    const handlePayment = async (name: string, mobileNumber: string, appointmentId: string) => {
       toast.info('در حال انتقال به درگاه پرداخت...')
@@ -73,7 +73,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
       const hour = Math.floor(timeValue / 60)
       const min = timeValue % 60
 
-      const reservedDate = new Date(year, month, day, hour, min)
+      const reservedAt = new Date(year, month, day, hour, min)
 
       try {
          toast.info('در حال ثبت رزرو...')
@@ -84,7 +84,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                name,
                mobileNumber,
                description,
-               reservedDate,
+               reservedAt,
             }),
          })
 
@@ -183,60 +183,87 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                      {workingDays.map((day) => {
                         if (day.dayIndex !== calendarValue.getDay()) return
 
-                        const eachSessionLength = 60
+                        const eachSessionLengthInMin = 60
 
-                        const sessions = (day.closeTime - day.openTime) / eachSessionLength
+                        const sessionsNumber =
+                           (day.closeTime - day.openTime) / eachSessionLengthInMin + 1
 
-                        return Array.from({ length: sessions }, (_, index) => {
-                           const sessionTime = day.openTime + index * eachSessionLength
+                        return Array.from({ length: sessionsNumber }, (_, index) => {
+                           const sessionTimeInMin = day.openTime + index * eachSessionLengthInMin
 
-                           let reservePaid
+                           let reservePaid = false
                            let reservePaymentExpired = false
-                           const reservedBefore = appointments?.some((appointment) => {
-                              const year = calendarValue.getFullYear()
-                              const month = calendarValue.getMonth()
-                              const day = calendarValue.getDate()
-                              const hour = Math.floor(sessionTime / 60)
-                              const min = sessionTime % 60
+                           let reservePast = false
+                           let reservedBefore = false
 
-                              const reserverdTime = new Date(year, month, day, hour, min)
+                           const appointment = appointments?.find((each) => {
+                              const calendarYear = calendarValue.getFullYear()
+                              const calendarMonth = calendarValue.getMonth()
+                              const calendarDay = calendarValue.getDate()
+                              const sessionStartHour = Math.floor(sessionTimeInMin / 60)
+                              const sessionStartMin = sessionTimeInMin % 60
+
+                              const reserveFullDate = new Date(
+                                 calendarYear,
+                                 calendarMonth,
+                                 calendarDay,
+                                 sessionStartHour,
+                                 sessionStartMin,
+                              )
+
+                              if (new Date(reserveFullDate).getTime() <= new Date().getTime())
+                                 return (reservePast = true)
 
                               if (
-                                 new Date(appointment.reservedDate).getTime() ==
-                                 reserverdTime.getTime()
+                                 new Date(each.reservedAt).getTime() == reserveFullDate.getTime()
                               ) {
-                                 reservePaid = appointment.paid
-                                 if (!reservePaid) {
-                                    const tenMin = 10 * 60 * 1000
-                                    reservePaymentExpired =
-                                       new Date(appointment.createdAt).getTime() + tenMin <=
-                                       new Date().getTime()
-                                 }
-                                 return true
+                                 return each
                               }
                            })
+
+                           if (!reservePast && appointment) {
+                              reservedBefore = true
+                              reservePaid = Boolean(appointment.paid)
+
+                              if (!reservePaid) {
+                                 const tenMin = 10 * 60 * 1000
+                                 reservePaymentExpired =
+                                    new Date(appointment.createdAt).getTime() + tenMin <=
+                                    new Date().getTime()
+                              }
+                           }
 
                            return (
                               <button
                                  disabled={
-                                    reservedBefore && (reservePaid || !reservePaymentExpired)
+                                    reservePast ||
+                                    (reservedBefore && (reservePaid || !reservePaymentExpired))
                                  }
                                  key={index}
-                                 className={`gap-3 rounded-md ${
-                                    reservedBefore && reservePaid ? 'border-2 border-red-600' : ''
-                                 } ${
-                                    reservedBefore && !reservePaid && !reservePaymentExpired
-                                       ? 'border-2 border-yellow-600'
-                                       : ''
-                                 } ${
-                                    timeValue == sessionTime
-                                       ? 'bg-blue-900 text-white shadow-md'
-                                       : 'bg-blue-100 text-slate-800'
-                                 } py-3 text-center`}
-                                 onClick={() => setTimeValue(sessionTime)}
+                                 className={`gap-3 rounded-md 
+                                    ${reservePast ? 'line-through opacity-50' : ''}
+                                    ${
+                                       reservedBefore && reservePaid
+                                          ? 'border-2 border-red-600'
+                                          : ''
+                                    }
+                                    ${
+                                       reservedBefore && !reservePaid && !reservePaymentExpired
+                                          ? 'border-2 border-yellow-600'
+                                          : ''
+                                    }
+                                    ${
+                                       timeValue == sessionTimeInMin
+                                          ? 'bg-blue-900 text-white shadow-md'
+                                          : 'bg-blue-100 text-slate-800'
+                                    }
+                                    py-3 text-center`}
+                                 onClick={() => setTimeValue(sessionTimeInMin)}
                               >
                                  <span className='text-base text-inherit'>
-                                    {formatTimeWithLeadingZeros(sessionTime / eachSessionLength)}
+                                    {formatTimeWithLeadingZeros(
+                                       sessionTimeInMin / eachSessionLengthInMin,
+                                    )}
                                  </span>
                               </button>
                            )

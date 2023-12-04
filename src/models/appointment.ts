@@ -6,7 +6,7 @@ export interface IAppointment {
    mobileNumber: string
    description: string
    paid: number
-   reservedDate: Date
+   reservedAt: Date
    createdAt: Date
    updatedAt: Date
 }
@@ -16,7 +16,7 @@ const AppointmentSchema = new mongoose.Schema({
    mobileNumber: String,
    description: String,
    paid: Number,
-   reservedDate: Date
+   reservedAt: Date
 })
 
 AppointmentSchema.set('timestamps', true)
