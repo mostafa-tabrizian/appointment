@@ -8,7 +8,7 @@ import dbConnect from '@/lib/dbConnect'
 export const revalidate = 0
 
 export const metadata = {
-   title: 'اپوینت‌منت | پنل ادمین | دسته بندی ها',
+   title: 'اپوینت منت | پنل ادمین | دسته بندی ها',
    robots: {
       index: false,
       follow: false,

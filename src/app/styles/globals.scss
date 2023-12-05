@@ -25,19 +25,11 @@
 }
 
 @font-face {
-   font-family: 'IRANYekanBold';
+   font-family: 'IRANYekanExtraBold';
    font-display: swap;
    src:
-      url('/font/IRANYekanBold.woff2') format('woff2'),
-      url('/font/IRANYekanBold.woff') format('woff');
-}
-
-@font-face {
-   font-family: 'IRANYekanBlack';
-   font-display: swap;
-   src:
-      url('/font/IRANYekanBlack.woff2') format('woff2'),
-      url('/font/IRANYekanBlack.woff') format('woff');
+      url('/font/IRANYekanExtraBold.woff2') format('woff2'),
+      url('/font/IRANYekanExtraBold.woff') format('woff');
 }
 
 * {
@@ -57,23 +49,30 @@ body {
    user-select: none;
 }
 
+div {
+   font-size: 1rem;
+   font-weight: bold;
+   font-family: IRANYekanRegular, sans-serif;
+   color: rgb(43, 45, 83);
+}
+
 a {
    text-decoration: none;
    font-size: 1rem;
-   font-family: IRANYekanBold, sans-serif;
+   font-family: IRANYekanRegular, sans-serif;
    color: rgb(43, 45, 83);
 }
 
 h1 {
    font-size: 1.4rem;
-   font-family: IRANYekanBlack, sans-serif;
+   font-family: IRANYekanExtraBold, sans-serif;
    color: rgb(43, 45, 83);
 }
 
 h2 {
    font-size: 1.1rem;
    font-weight: bold;
-   font-family: IRANYekanBlack, sans-serif;
+   font-family: IRANYekanExtraBold, sans-serif;
    color: rgb(43, 45, 83);
 }
 
@@ -111,6 +110,12 @@ p {
    color: rgb(43, 45, 83);
 }
 
+li {
+   font-size: 1rem;
+   font-family: IRANYekanRegular, sans-serif;
+   color: rgb(43, 45, 83);
+}
+
 input,
 textarea {
    font-size: 1rem;
@@ -125,8 +130,7 @@ textarea {
 
 span {
    font-family: IRANYekanRegular, sans-serif;
-   font-size: 0.8rem;
-   color: rgb(43, 45, 83);
+   color: rgb(100, 116, 139);
 }
 
 label {
@@ -146,11 +150,8 @@ h6 {
 }
 
 strong {
-   font-family: IRANYekanBlack, sans-serif;
-}
-
-tspan {
-   font-size: 0.8rem !important;
+   font-family: IRANYekanRegular, sans-serif;
+   font-weight: 600;
 }
 
 .rtl {
@@ -165,8 +166,8 @@ tspan {
    font-family: IRANYekanRegular, sans-serif;
 }
 
-.yekanBlack {
-   font-family: IRANYekanBlack, sans-serif;
+.yekanExtraBold {
+   font-family: IRANYekanExtraBold, IRANYekanRegular, sans-serif;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -218,6 +219,19 @@ tspan {
    border: 2px solid red;
 }
 
+.animate-spin-slower {
+   animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+   from {
+      transform: rotate(0deg);
+   }
+   to {
+      transform: rotate(360deg);
+   }
+}
+
 .Toastify__toast {
    border-radius: 15px !important;
 
@@ -227,115 +241,14 @@ tspan {
    }
 }
 
-.MuiFormLabel-root {
-   font-family: IRANYekanRegular, sans-serif !important;
+.recharts-surface,
+.recharts-wrapper {
+   width: 100% !important;
+   height: 100% !important;
 }
 
-.MuiMenuItem-root {
-   font-family: IRANYekanRegular, sans-serif !important;
-}
-
-.MuiInputBase-root {
-   font-size: 0.9rem;
-   font-family: IRANYekanRegular, sans-serif !important;
-}
-
-.MuiAutocomplete-option {
-   font-family: IRANYekanRegular, sans-serif !important;
-}
-
-.MuiTooltip-tooltip {
-   font-family: IRANYekanRegular, sans-serif !important;
-   background: rgb(44, 47, 79);
-}
-
-.MuiButton-contained {
-   font-family: IRANYekanRegular, sans-serif !important;
-   background: #0084ff !important;
-   font-weight: 600 !important;
-   box-shadow: 0 5px 10px #708dff9c !important;
-
-   &:hover {
-      background: #2495ff !important;
-   }
-}
-
-.MuiButton-outlined {
-   font-family: IRANYekanRegular, sans-serif !important;
-   border: 2px solid #708dff9c;
-   font-weight: 600 !important;
-
-   &:hover {
-      background: transparent !important;
-      border: 2px solid #6281ff;
-   }
-}
-
-.MuiAccordion-root {
-   margin: 1rem 0;
-   border: 1px solid rgb(100 116 139) !important;
-   border-radius: 15px !important;
-}
-
-.MuiPopover-paper {
-   border-radius: 15px !important;
-}
-
-.MuiFormControlLabel-label {
-   font-family: IRANYekanRegular, sans-serif !important;
-   font-size: 14px;
-   color: rgb(100 116 139);
-}
-
-.MuiDrawer-paper {
-   border-radius: 25px;
-
-   @media (min-width: 641px) {
-      width: 20%;
-   }
-}
-
-.MuiStepConnector-root {
-   transform: translateX(8rem);
-   margin: 0 0.5rem;
-}
-
-.MuiSlider-thumb {
-   color: #2495ff !important;
-}
-
-.MuiSlider-track {
-   background-color: #0066ff !important;
-   border: none !important;
-}
-
-.MuiSlider-rail {
-   background-color: #71aaff !important;
-}
-
-.MuiSlider-markLabel {
-   font-family: IRANYekanRegular, sans-serif !important;
-   font-size: 14px;
-   color: rgb(100 116 139);
-}
-
-.MuiSlider-mark {
-   background-color: #0084ff !important;
-   width: 6px !important;
-   height: 6px !important;
-   border-radius: 15px !important;
-}
-
-.MuiSlider-valueLabel {
-   background: #0084ff !important;
-
-   &Label {
-      color: white !important;
-   }
-}
-
-.MuiChip-root {
-   border-radius: 5px !important;
+tspan {
+   font-size: 0.6rem !important;
 }
 
 // zaman package

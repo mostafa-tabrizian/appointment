@@ -21,7 +21,7 @@ const fetchData = async (_id: string) => {
 }
 
 export const metadata = {
-   title: 'اپوینت‌منت | ادمین | محصول',
+   title: 'اپوینت منت | ادمین | محصول',
 }
 
 const ProductPage = async ({ params: { _id } }: { params: { _id: string } }) => {

@@ -9,7 +9,7 @@ import WorkingDays from '@/models/workingDays'
 // import Hero from './components/hero'
 
 export const metadata = {
-   title: 'اپوینت‌منت | رزرو تاریخ و ساعت مراجعه',
+   title: 'اپوینت منت | رزرو تاریخ و ساعت مراجعه',
    description: '#',
 }
 

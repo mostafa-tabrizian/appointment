@@ -13,7 +13,7 @@ const getAppointments = async () => {
 export const revalidate = 0
 
 export const metadata = {
-   title: 'اپوینت‌منت | پنل ادمین | محصولات',
+   title: 'اپوینت منت | پنل ادمین | محصولات',
    robots: {
       index: false,
       follow: false,

@@ -12,10 +12,10 @@ import {
    getPaginationRowModel,
 } from '@tanstack/react-table'
 
-import { IProduct } from '@/models/product'
+import { IAppointment } from '@/models/appointment'
 import { useMemo, useState } from 'react'
 
-const appointmentsTable = ({ appointments }: { appointments: IProduct[] }) => {
+const AppointmentsTable = ({ appointments }: { appointments: IAppointment[] }) => {
    const [sorting, setSorting] = useState<SortingState>([])
 
    const columns = useMemo<ColumnDef<unknown>[]>(
@@ -27,113 +27,74 @@ const appointmentsTable = ({ appointments }: { appointments: IProduct[] }) => {
                const value = getValue() as string
                return (
                   <Link href={`/--admin--/appointments/${value}`}>
-                     <span>{value.slice(0, 10)}</span>
+                     <span className=''>{value.slice(-5)}</span>
                   </Link>
                )
             },
          },
+         // {
+         //    accessorKey: 'active',
+         //    header: 'فعال',
+         //    cell: ({ getValue }) => (
+         //       <>
+         //          {getValue() ? (
+         //             <svg
+         //                className='mx-auto h-5 w-5 text-green-700'
+         //                width='24'
+         //                height='24'
+         //                viewBox='0 0 24 24'
+         //                strokeWidth='2'
+         //                stroke='currentColor'
+         //                fill='none'
+         //                strokeLinecap='round'
+         //                strokeLinejoin='round'
+         //             >
+         //                {' '}
+         //                <path stroke='none' d='M0 0h24v24H0z' /> <circle cx='12' cy='12' r='9' />{' '}
+         //                <path d='M9 12l2 2l4 -4' />
+         //             </svg>
+         //          ) : (
+         //             <svg
+         //                className='mx-auto h-5 w-5 text-rose-700'
+         //                width='24'
+         //                height='24'
+         //                viewBox='0 0 24 24'
+         //                strokeWidth='2'
+         //                stroke='currentColor'
+         //                fill='none'
+         //                strokeLinecap='round'
+         //                strokeLinejoin='round'
+         //             >
+         //                {' '}
+         //                <path stroke='none' d='M0 0h24v24H0z' /> <circle cx='12' cy='12' r='9' />{' '}
+         //                <path d='M10 10l4 4m0 -4l-4 4' />
+         //             </svg>
+         //          )}
+         //       </>
+         //    ),
+         // },
          {
-            accessorKey: 'active',
-            header: 'فعال',
-            cell: ({ getValue }) => (
-               <>
-                  {getValue() ? (
-                     <svg
-                        className='mx-auto h-5 w-5 text-green-700'
-                        width='24'
-                        height='24'
-                        viewBox='0 0 24 24'
-                        strokeWidth='2'
-                        stroke='currentColor'
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                     >
-                        {' '}
-                        <path stroke='none' d='M0 0h24v24H0z' /> <circle cx='12' cy='12' r='9' />{' '}
-                        <path d='M9 12l2 2l4 -4' />
-                     </svg>
-                  ) : (
-                     <svg
-                        className='mx-auto h-5 w-5 text-rose-700'
-                        width='24'
-                        height='24'
-                        viewBox='0 0 24 24'
-                        strokeWidth='2'
-                        stroke='currentColor'
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                     >
-                        {' '}
-                        <path stroke='none' d='M0 0h24v24H0z' /> <circle cx='12' cy='12' r='9' />{' '}
-                        <path d='M10 10l4 4m0 -4l-4 4' />
-                     </svg>
-                  )}
-               </>
-            ),
-         },
-         {
-            accessorKey: 'inStock',
-            header: 'موجود',
-            cell: ({ getValue }) => (
-               <>
-                  {getValue() ? (
-                     <svg
-                        className='mx-auto h-5 w-5 text-green-700'
-                        width='24'
-                        height='24'
-                        viewBox='0 0 24 24'
-                        strokeWidth='2'
-                        stroke='currentColor'
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                     >
-                        {' '}
-                        <path stroke='none' d='M0 0h24v24H0z' /> <circle cx='12' cy='12' r='9' />{' '}
-                        <path d='M9 12l2 2l4 -4' />
-                     </svg>
-                  ) : (
-                     <svg
-                        className='mx-auto h-5 w-5 text-rose-700'
-                        width='24'
-                        height='24'
-                        viewBox='0 0 24 24'
-                        strokeWidth='2'
-                        stroke='currentColor'
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                     >
-                        {' '}
-                        <path stroke='none' d='M0 0h24v24H0z' /> <circle cx='12' cy='12' r='9' />{' '}
-                        <path d='M10 10l4 4m0 -4l-4 4' />
-                     </svg>
-                  )}
-               </>
-            ),
-         },
-         {
-            accessorKey: 'title',
-            header: 'عنوان',
+            accessorKey: 'name',
+            header: 'نام و نام خانوادگی',
             cell: ({ getValue }) => (
                <span className='text-sm text-slate-500'>{getValue() as string}</span>
             ),
          },
          {
-            accessorKey: 'price',
-            header: 'قیمت (تومان)',
-            cell: ({ getValue }) => {
-               const data = getValue() as [{ value: string }]
-               const lastIndex = data.length - 1
-
-               return parseInt(data[lastIndex].value as string).toLocaleString('per')
-            },
+            accessorKey: 'description',
+            header: 'توضیحات',
+            cell: ({ getValue }) => (
+               <span className='text-sm text-slate-500'>{getValue() as string}</span>
+            ),
          },
          {
-            accessorKey: 'updatedAt',
-            header: 'تاریخ بروزرسانی',
+            accessorKey: 'reservedAt',
+            header: 'تاریخ و ساعت رزرو',
+            cell: ({ getValue }) => (
+               <span className='text-sm text-slate-500'>
+                  {new Date(getValue() as string).toLocaleString('fa')}
+               </span>
+            ),
          },
       ],
       [],
@@ -155,7 +116,7 @@ const appointmentsTable = ({ appointments }: { appointments: IProduct[] }) => {
    return (
       <div className='relative overflow-x-auto bg-white'>
          <table className='w-full table-auto text-left text-sm text-slate-500'>
-            <thead className='bg-slate-50 text-xs uppercase text-slate-300'>
+            <thead className='bg-slate-50 text-xs uppercase text-slate-500'>
                {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>
                      {headerGroup.headers.map((header) => {
@@ -193,7 +154,7 @@ const appointmentsTable = ({ appointments }: { appointments: IProduct[] }) => {
             <tbody>
                {table.getRowModel().rows.map((row) => {
                   return (
-                     <tr key={row.id} className='border-b border-slate-300 bg-white'>
+                     <tr key={row.id} className='border-b border-slate-200 bg-white'>
                         {row.getVisibleCells().map((cell) => {
                            return (
                               <td key={cell.id} className='px-6 py-4 text-center'>
@@ -273,4 +234,4 @@ const appointmentsTable = ({ appointments }: { appointments: IProduct[] }) => {
    )
 }
 
-export default appointmentsTable
+export default AppointmentsTable

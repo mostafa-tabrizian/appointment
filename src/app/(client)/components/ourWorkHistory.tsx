@@ -16,7 +16,7 @@ const OurWorkHistory = () => {
             <div>
                <div className='flex justify-end items-center gap-x-3 mb-4'>
                   <h2 className='yekanBlack text-slate-900 text-xl md:text-right md:text-4xl'>
-                     سابقه اپوینت‌منت
+                     سابقه اپوینت منت
                   </h2>
                   <div className='p-3 relative from-blue-300 to-blue-500 bg-gradient-to-r flex items-center rounded-3xl justify-center drop-shadow'>
                      <svg

@@ -1,6 +1,6 @@
 'use client'
 
-import '@/app/globals.scss'
+import '@/app/styles/globals.scss'
 import 'react-toastify/dist/ReactToastify.min.css'
 
 // import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
