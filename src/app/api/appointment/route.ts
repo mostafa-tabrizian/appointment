@@ -1,7 +1,4 @@
-import authOptions from '@/lib/auth'
-
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
 
 import Appointment, { IAppointment } from '@/models/appointment'
 import dbConnect from '@/lib/dbConnect'
@@ -20,14 +17,40 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(request: Request) {
+   const checkAppointmentAvalibility = async (reservedAt: Date) => {
+
+      const appointmentTimeExist = await Appointment.findOne({ reservedAt })
+
+      if (appointmentTimeExist) {
+         const reservedBefore = true
+         const reservePaid = Boolean(appointmentTimeExist.paid)
+         let reservePaymentExpired = false
+
+         const reservedAtToDate = new Date(reservedAt)
+         const nowDate = new Date().getTime()
+         const reservePast = reservedAtToDate.getTime() <= nowDate
+
+
+         if (!reservePaid) {
+            const thirteenMin = 13 * 60 * 1000
+            reservePaymentExpired =
+               new Date(appointmentTimeExist.updatedAt).getTime() + thirteenMin <=
+               new Date().getTime()
+         }
+
+         if (reservePast || (reservedBefore && (reservePaid || !reservePaymentExpired))) return true
+         else return false
+      }
+
+   }
+
    try {
       const { name, mobileNumber, description, reservedAt }: IAppointment = await request.json()
 
-
-      const session: { _doc: { _id: string } } | null = await getServerSession(authOptions)
-      if (!session) return NextResponse.json({ status: 403 })
-
       dbConnect()
+
+      const appointmentNotAvailable = await checkAppointmentAvalibility(reservedAt)
+      if (appointmentNotAvailable) return NextResponse.json({ status: 422, message: 'Reserved before' })
 
       const appointmentExist = await Appointment.findOne({ name, reservedAt })
       if (appointmentExist) {

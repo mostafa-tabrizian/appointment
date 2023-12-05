@@ -91,7 +91,9 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
          const resData = await res.json()
 
          if (!res.ok) throw new Error()
-         else if (resData.status == 500) {
+         else if (resData.status == 422) {
+            return toast.warn('این ساعت و تاریخ رزرو شده است.')
+         } else if (resData.status == 500) {
             console.error(resData.message)
             return toast.error('خطا در برقراری ارتباط')
          }
@@ -183,6 +185,12 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                   <div className='grid grid-cols-3 gap-5'>
                      {workingDays.map((day) => {
                         if (day.dayIndex !== calendarValue.getDay()) return
+                        if (day.closed)
+                           return (
+                              <div className='col-span-3 w-full rounded-md bg-blue-100 py-3 text-center'>
+                                 <span className='text-lg text-slate-800'>امروز تعطیل می‌باشد</span>
+                              </div>
+                           )
 
                         const eachSessionLengthInMin = 60
 
@@ -228,9 +236,9 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                               reservePaid = Boolean(appointment.paid)
 
                               if (!reservePaid) {
-                                 const tenMin = 10 * 60 * 1000
+                                 const thirteenMin = 13 * 60 * 1000
                                  reservePaymentExpired =
-                                    new Date(appointment.updatedAt).getTime() + tenMin <=
+                                    new Date(appointment.updatedAt).getTime() + thirteenMin <=
                                     new Date().getTime()
                               }
                            }

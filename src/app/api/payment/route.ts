@@ -6,8 +6,6 @@ export async function POST(request: NextRequest) {
 
     const { name, mobileNumber, appointmentId } = await request.json()
 
-    console.log('{ name, mobileNumber, appointmentId }', { name, mobileNumber, appointmentId });
-
     try {
         const res = await fetch('https://api.zarinpal.com/pg/v4/payment/request.json', {
             method: 'POST',
@@ -65,9 +63,6 @@ export async function GET(req: NextRequest) {
         }
 
         const verifyRes = await verifyPayment()
-
-        console.log('verifyRes', verifyRes);
-
 
         if (verifyRes.code == 100 || verifyRes.code == 101) {  // 100=success, 101=verified successs before
 
