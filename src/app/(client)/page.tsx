@@ -5,7 +5,7 @@
 // import RoadMap from './components/roadMap'
 import dbConnect from '@/lib/dbConnect'
 import Reserve from './components/reserve'
-import WorkingDays from '@/models/workingDays'
+import WorkingDays from '@/models/workingDay'
 // import Hero from './components/hero'
 
 export const metadata = {

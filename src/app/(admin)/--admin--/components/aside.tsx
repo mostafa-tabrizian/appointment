@@ -95,11 +95,11 @@ const Aside = () => {
 
                   <Link
                      className={` ${
-                        pathname.includes('categories')
+                        pathname.includes('workingDays')
                            ? ' bg-gradient-to-tl from-[#568deb] to-blue-300 text-white'
                            : ''
                      } flex h-10 items-center gap-x-2.5 rounded-lg px-3 shadow shadow-blue-700/10 transition-shadow hover:shadow-lg hover:shadow-blue-100`}
-                     href='/--admin--/categories'
+                     href='/--admin--/workingDays'
                   >
                      <svg
                         className='h-7 w-7'

@@ -7,7 +7,7 @@ import Swiper from 'swiper/bundle'
 import { toast } from 'react-toastify'
 import 'swiper/css/bundle'
 
-import { ICourse } from '@/models/workingDays'
+import { ICourse } from '@/models/workingDay'
 import CourseCards from '@/components/course/cards'
 import stringtoDate from '@/lib/stringToDate'
 import fetcher from '@/lib/fetcher'

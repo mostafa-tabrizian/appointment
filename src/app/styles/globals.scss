@@ -25,11 +25,11 @@
 }
 
 @font-face {
-   font-family: 'IRANYekanExtraBold';
+   font-family: 'IRANYekanBlack';
    font-display: swap;
    src:
-      url('/font/IRANYekanExtraBold.woff2') format('woff2'),
-      url('/font/IRANYekanExtraBold.woff') format('woff');
+      url('/font/IRANYekanBlack.woff2') format('woff2'),
+      url('/font/IRANYekanBlack.woff') format('woff');
 }
 
 * {
@@ -65,14 +65,14 @@ a {
 
 h1 {
    font-size: 1.4rem;
-   font-family: IRANYekanExtraBold, sans-serif;
+   font-family: IRANYekanBlack, sans-serif;
    color: rgb(43, 45, 83);
 }
 
 h2 {
    font-size: 1.1rem;
    font-weight: bold;
-   font-family: IRANYekanExtraBold, sans-serif;
+   font-family: IRANYekanBlack, sans-serif;
    color: rgb(43, 45, 83);
 }
 
@@ -167,7 +167,7 @@ strong {
 }
 
 .yekanExtraBold {
-   font-family: IRANYekanExtraBold, IRANYekanRegular, sans-serif;
+   font-family: IRANYekanBlack, IRANYekanRegular, sans-serif;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */

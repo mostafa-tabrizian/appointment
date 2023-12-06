@@ -1,7 +1,7 @@
 'use client'
 
 import { IAppointment } from '@/models/appointment'
-import { IWorkingDay } from '@/models/workingDays'
+import { IWorkingDay } from '@/models/workingDay'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Calendar, CalendarProvider } from 'zaman'

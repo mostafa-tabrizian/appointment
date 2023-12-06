@@ -1,4 +1,4 @@
-import { ICourse } from '@/models/workingDays'
+import { ICourse } from '@/models/workingDay'
 import Rating from '@mui/material/Rating'
 // import Avatar from '@mui/material/Avatar'
 import SuggestionStatus from '../course/[slug]/components/comment/suggestionStatus'

@@ -6,7 +6,7 @@ import Swiper from 'swiper/bundle'
 import 'swiper/css/bundle'
 
 import Comment from './comment'
-import { ICourse } from '@/models/workingDays'
+import { ICourse } from '@/models/workingDay'
 
 const SwiperComments = ({ comments }: { comments: ICourse['comments'] }) => {
    useEffect(() => {

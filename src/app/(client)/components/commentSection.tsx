@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { ICourse } from '@/models/workingDays'
+import { ICourse } from '@/models/workingDay'
 import SwiperComments from './swiperComment'
 
 const CommentSection = () => {
