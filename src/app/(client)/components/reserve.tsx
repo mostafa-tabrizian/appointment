@@ -233,7 +233,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
 
                            if (!reservePast && appointment) {
                               reservedBefore = true
-                              reservePaid = Boolean(appointment.paid)
+                              reservePaid = appointment.paid
 
                               if (!reservePaid) {
                                  const thirteenMin = 13 * 60 * 1000

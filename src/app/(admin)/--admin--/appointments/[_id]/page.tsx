@@ -1,41 +1,35 @@
 import Link from 'next/link'
 
 import dbConnect from '@/lib/dbConnect'
-import Product from '@/models/product'
-import DetailProduct from '../components/detailForm'
-import Category from '@/models/category'
-import Factory from '@/models/factory'
+import Appointment from '@/models/appointment'
+import DetailAppointment from '../components/detailForm'
 
 const fetchData = async (_id: string) => {
    await dbConnect()
 
-   let product
+   let appointment
 
-   if (_id !== 'new') {
-      product = await Product.findOne({ _id })
-   }
-   const categories = await Category.find()
-   const factories = await Factory.find({ active: true })
+   if (_id !== 'new') appointment = await Appointment.findOne({ _id })
 
-   return { product, categories, factories }
+   return { appointment }
 }
 
 export const metadata = {
    title: 'اپوینت منت | ادمین | محصول',
 }
 
-const ProductPage = async ({ params: { _id } }: { params: { _id: string } }) => {
-   const addingNewProduct = _id === 'new'
+const AppointmentPage = async ({ params: { _id } }: { params: { _id: string } }) => {
+   // const addingNewAppointment = _id === 'new'
 
    try {
-      const { product, categories, factories } = await fetchData(_id)
+      const { appointment } = await fetchData(_id)
 
       return (
          <div className='relative mx-6 my-16'>
             <div className='mx-6 my-16 max-w-screen-xl space-y-10 md:mx-auto'>
-               {product || addingNewProduct ? (
+               {appointment ? ( // || addingNewAppointment
                   <div className='mx-auto max-w-xl'>
-                     <Link href='/--admin--/appointments/new'>
+                     {/* <Link href='/--admin--/appointments/new'>
                         <button className='fixed bottom-10 right-5 z-10 rounded-full border-2 border-red-500 bg-white p-3'>
                            <svg
                               className='h-6 w-6 text-red-500'
@@ -51,13 +45,13 @@ const ProductPage = async ({ params: { _id } }: { params: { _id: string } }) => 
                               />
                            </svg>
                         </button>
-                     </Link>
+                     </Link> */}
 
-                     <DetailProduct
-                        addingNewProduct={addingNewProduct}
-                        product={addingNewProduct ? null : JSON.parse(JSON.stringify(product))}
-                        categories={JSON.parse(JSON.stringify(categories))}
-                        factories={JSON.parse(JSON.stringify(factories))}
+                     <DetailAppointment
+                        // addingNewAppointment={addingNewAppointment}
+                        appointment={
+                           JSON.parse(JSON.stringify(appointment)) // addingNewAppointment ? null :
+                        }
                      />
                   </div>
                ) : (
@@ -72,4 +66,4 @@ const ProductPage = async ({ params: { _id } }: { params: { _id: string } }) => 
    }
 }
 
-export default ProductPage
+export default AppointmentPage

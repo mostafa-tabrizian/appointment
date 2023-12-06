@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
       if (appointmentTimeExist) {
          const reservedBefore = true
-         const reservePaid = Boolean(appointmentTimeExist.paid)
+         const reservePaid = appointmentTimeExist.paid
          let reservePaymentExpired = false
 
          const reservedAtToDate = new Date(reservedAt)

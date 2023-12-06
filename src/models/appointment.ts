@@ -5,7 +5,7 @@ export interface IAppointment {
    name: string
    mobileNumber: string
    description: string
-   paid: number
+   paid: boolean
    reservedAt: Date
    createdAt: Date
    updatedAt: Date
@@ -15,7 +15,7 @@ const AppointmentSchema = new mongoose.Schema({
    name: String,
    mobileNumber: String,
    description: String,
-   paid: Number,
+   paid: Boolean,
    reservedAt: Date
 })
 
