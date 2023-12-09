@@ -144,10 +144,10 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
    }
 
    return (
-      <div>
+      <div className='mx-2 mb-24 max-w-screen-xl overflow-x-hidden md:mx-auto md:max-w-screen-lg'>
          <h1 className='mb-10 text-center text-4xl'>رزرو تاریخ و ساعت مراجعه</h1>
 
-         <div className='grid grid-cols-2 gap-10'>
+         <div className='grid gap-10 md:grid-cols-2'>
             <div>
                <CalendarProvider accentColor='#1e3a8a' locale='fa' round='x2'>
                   <Calendar
@@ -297,7 +297,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
             <div className='w-96 space-y-5 p-5 text-center'>
                <div className='flex gap-5'>
                   <svg
-                     className='h-16 w-16 text-green-500'
+                     className='h-16 w-16 text-blue-500'
                      width='24'
                      height='24'
                      viewBox='0 0 24 24'
@@ -350,7 +350,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
 
                         <div className='grid grid-cols-4 gap-3'>
                            {isSubmitting ? (
-                              <div className='col-span-4 rounded bg-green-500'>
+                              <div className='col-span-4 rounded bg-blue-500'>
                                  <svg
                                     className='mx-auto my-1 h-6 w-6 animate-spin text-white'
                                     xmlns='http://www.w3.org/2000/svg'
@@ -376,7 +376,7 @@ const Reserve = ({ workingDays }: { workingDays: IWorkingDay[] }) => {
                               <>
                                  <button
                                     type='submit'
-                                    className='col-span-3 w-full rounded bg-green-500 py-1 text-white'
+                                    className='col-span-3 w-full rounded bg-blue-500 py-1 text-white'
                                  >
                                     پرداخت و ثبت نهایی
                                  </button>

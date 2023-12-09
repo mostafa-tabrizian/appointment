@@ -6,7 +6,7 @@
 import dbConnect from '@/lib/dbConnect'
 import Reserve from './components/reserve'
 import WorkingDays from '@/models/workingDay'
-// import Hero from './components/hero'
+import Hero from './components/hero'
 
 export const metadata = {
    title: 'اپوینت منت | رزرو تاریخ و ساعت مراجعه',
@@ -19,8 +19,8 @@ async function Home() {
    const workingDays = await WorkingDays.find()
 
    return (
-      <div className='mb-16 mt-24 space-y-16'>
-         {/* <Hero /> */}
+      <div className='mb-16 space-y-16'>
+         <Hero />
 
          <Reserve workingDays={JSON.parse(JSON.stringify(workingDays))} />
 
