@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
    const from = new Date(year, month, day, 5)
    const to = new Date(year, month, day, 23, 59)
 
-   return NextResponse.json(await Appointment.find({ reservedAt: { $gte: from, $lte: to } }))
+   return NextResponse.json(await Appointment.find({ reservedAt: { $gte: from, $lte: to }, active: true }))
 }
 
 export async function POST(request: Request) {
@@ -76,6 +76,21 @@ export async function POST(request: Request) {
          message: 'appointment submitted'
       })
    } catch (err) {
+      return NextResponse.json({ status: 500 })
+   }
+}
+
+export async function PATCH(req: NextRequest) {
+   const { _id } = await req.json()
+
+   try {
+      const appointment = await Appointment.findById(_id)
+      appointment.active = !appointment.active
+      appointment.save()
+      return NextResponse.json({ status: 200 })
+
+   } catch (err) {
+      console.error('appointment patch: ', err);
       return NextResponse.json({ status: 500 })
    }
 }

@@ -6,6 +6,7 @@ export interface IAppointment {
    mobileNumber: string
    description: string
    paid: boolean
+   active: boolean
    reservedAt: Date
    createdAt: Date
    updatedAt: Date
@@ -16,6 +17,10 @@ const AppointmentSchema = new mongoose.Schema({
    mobileNumber: String,
    description: String,
    paid: Boolean,
+   active: {
+      type: Boolean,
+      default: true,
+   },
    reservedAt: Date
 })
 
